@@ -5,12 +5,19 @@ import authRouter from "./routes/authRoutes.js";
 import session from "express-session";
 import passport from "passport";
 import { passportConfig } from "./config/passport.js";
+import cors from "cors";
 
 dotenv.config();
 const port = process.env.PORT;
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
 //session
 app.use(
   session({
@@ -24,6 +31,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 passportConfig(passport);
 
+app.use("/api/auth", authRouter);
 //error middlewares
 app.use((req, res, next) => {
   const error = new Error(`path not found! ${req.originalUrl}`);
@@ -35,7 +43,6 @@ app.use((err, req, res, next) => {
   res.status(statusCode).json({ success: false, err: err.message });
 });
 
-app.use("/api/auth", authRouter);
 dbConnection();
 app.listen(port, () => {
   console.log(`Server is running at port:${port}`);
