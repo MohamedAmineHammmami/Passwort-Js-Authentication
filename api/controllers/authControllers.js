@@ -58,7 +58,7 @@ export const logout = async (req, res) => {
     res.status(200).json({ success: true, msg: "you're logged out!" });
   });
 };
-
 export const profile = async (req, res) => {
-  res.send("profile");
+  const { password, ...rest } = req.user._doc;
+  res.status(200).json({ success: true, user: rest });
 };

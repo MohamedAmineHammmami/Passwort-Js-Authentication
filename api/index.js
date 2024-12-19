@@ -24,6 +24,17 @@ app.use(passport.initialize());
 app.use(passport.session());
 passportConfig(passport);
 
+//error middlewares
+app.use((req, res, next) => {
+  const error = new Error(`path not found! ${req.originalUrl}`);
+  res.status(404);
+  next(error);
+});
+app.use((err, req, res, next) => {
+  const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
+  res.status(statusCode).json({ success: false, err: err.message });
+});
+
 app.use("/api/auth", authRouter);
 dbConnection();
 app.listen(port, () => {
