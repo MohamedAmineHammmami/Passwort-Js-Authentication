@@ -30,7 +30,7 @@ export const inputsValidation = async (data) => {
   try {
     return await schema.validateAsync(data);
   } catch (err) {
-    return err.details[0].message;
+    return err.details[0];
   }
 };
 
