@@ -14,8 +14,8 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: true,
   },
+  googleId: String,
 });
 
 export const inputsValidation = async (data) => {

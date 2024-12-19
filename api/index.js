@@ -4,7 +4,7 @@ import { dbConnection } from "./database/db.js";
 import authRouter from "./routes/authRoutes.js";
 import session from "express-session";
 import passport from "passport";
-import { passportConfig } from "./config/passport.js";
+import { googleStrategyConfig, passportConfig } from "./config/passport.js";
 import cors from "cors";
 
 dotenv.config();
@@ -30,8 +30,23 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 passportConfig(passport);
+googleStrategyConfig(passport);
 
 app.use("/api/auth", authRouter);
+
+//google authentication
+app.get(
+  "/auth/google",
+  passport.authenticate("google", { scope: ["profile", "email"] })
+);
+app.get(
+  "/auth/google/callback",
+  passport.authenticate("google", { failureRedirect: false }),
+  (req, res) => {
+    res.redirect("http://localhost:3000/profile");
+  }
+);
+
 //error middlewares
 app.use((req, res, next) => {
   const error = new Error(`path not found! ${req.originalUrl}`);

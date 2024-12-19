@@ -1,15 +1,22 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faGoogle,
+  faLinkedinIn,
+  faGithub,
+} from "@fortawesome/free-brands-svg-icons";
 import "./signIn.css";
 import { axiosInstance } from "../../helper/axiosInstance.js";
 
 function SignIn() {
   const [data, setData] = useState({ email: "", password: "" });
   const navigate = useNavigate();
+
   const handleOnChange = async (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -20,6 +27,7 @@ function SignIn() {
       console.log(err);
     }
   };
+
   return (
     <section className="vh-100">
       <div className="container-fluid h-custom">
@@ -35,13 +43,22 @@ function SignIn() {
             <form>
               <div className="d-flex flex-row align-items-center justify-content-center justify-content-lg-start">
                 <p className="lead fw-bold mb-0 me-3 fs-1">Sign in with</p>
+                <Link
+                  to="http://localhost:5000/auth/google"
+                  data-mdb-button-init
+                  data-mdb-ripple-init
+                  className="btn btn-primary btn-floating mx-1"
+                >
+                  <FontAwesomeIcon icon={faGoogle} />
+                </Link>
+
                 <button
                   type="button"
                   data-mdb-button-init
                   data-mdb-ripple-init
                   className="btn btn-primary btn-floating mx-1"
                 >
-                  <i className="fab fa-facebook-f"></i>
+                  <FontAwesomeIcon icon={faGithub} />
                 </button>
 
                 <button
@@ -50,16 +67,7 @@ function SignIn() {
                   data-mdb-ripple-init
                   className="btn btn-primary btn-floating mx-1"
                 >
-                  <i className="fab fa-twitter"></i>
-                </button>
-
-                <button
-                  type="button"
-                  data-mdb-button-init
-                  data-mdb-ripple-init
-                  className="btn btn-primary btn-floating mx-1"
-                >
-                  <i className="fab fa-linkedin-in"></i>
+                  <FontAwesomeIcon icon={faLinkedinIn} />
                 </button>
               </div>
 

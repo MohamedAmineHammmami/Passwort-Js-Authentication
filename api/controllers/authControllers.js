@@ -12,13 +12,22 @@ export const register = async (req, res) => {
       return res.status(400).json({ success: false, msg: checkInputs.message });
     }
     const isExist = await User.findOne({ email });
-    if (isExist) {
+    if (isExist && !isExist?.googleId) {
       return res
         .status(400)
         .json({ success: false, msg: "User already exist!" });
     }
     const salt = await bcrypt.genSalt(10);
     const hash = await bcrypt.hash(password, salt);
+    //here im trying to update the google auth
+    //to be able to signIn from local & google strategy
+    if (isExist.googleId) {
+      isExist.password = hash;
+      await isExist.save();
+      return res
+        .status(201)
+        .json({ success: true, msg: "Oauth Google account updated" });
+    }
     const user = await User.create({ username, email, password: hash });
     await user.save();
     res
