@@ -52,14 +52,14 @@ function SignIn() {
                   <FontAwesomeIcon icon={faGoogle} />
                 </Link>
 
-                <button
-                  type="button"
+                <Link
+                  to="http://localhost:5000/auth/github"
                   data-mdb-button-init
                   data-mdb-ripple-init
                   className="btn btn-primary btn-floating mx-1"
                 >
                   <FontAwesomeIcon icon={faGithub} />
-                </button>
+                </Link>
 
                 <button
                   type="button"

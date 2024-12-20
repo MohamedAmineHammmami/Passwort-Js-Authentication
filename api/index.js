@@ -4,7 +4,11 @@ import { dbConnection } from "./database/db.js";
 import authRouter from "./routes/authRoutes.js";
 import session from "express-session";
 import passport from "passport";
-import { googleStrategyConfig, passportConfig } from "./config/passport.js";
+import {
+  githubStrategyConfig,
+  googleStrategyConfig,
+  passportConfig,
+} from "./config/passport.js";
 import cors from "cors";
 
 dotenv.config();
@@ -31,6 +35,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 passportConfig(passport);
 googleStrategyConfig(passport);
+githubStrategyConfig(passport);
 
 app.use("/api/auth", authRouter);
 
@@ -43,6 +48,17 @@ app.get(
   "/auth/google/callback",
   passport.authenticate("google", { failureRedirect: false }),
   (req, res) => {
+    res.redirect("http://localhost:3000/profile");
+  }
+);
+//github authentication
+app.get("/auth/github", passport.authenticate("github"));
+
+app.get(
+  "/auth/github/callback",
+  passport.authenticate("github", { failureRedirect: "/login" }),
+  function (req, res) {
+    // Successful authentication, redirect home.
     res.redirect("http://localhost:3000/profile");
   }
 );
